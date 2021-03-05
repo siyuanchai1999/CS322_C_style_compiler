@@ -1,0 +1,103 @@
+(:entry
+    (:entry
+        0
+        rdi <- 101 //so 50
+        goto :uncondsuccess
+        //should not be printed 
+        call print 1
+        :uncondsuccess
+        rdi += 2
+        rdi *= 3 // 309 at this point
+        %saved <- rdi
+        call print 1 // expect 154
+        rdi <-   %saved
+        r10 <- rdi = 309 //r10 should be 1
+        r10 <<= 1 
+        r10 += 1 // 3 rn
+        rdi <- r10 
+        %saved <- r10
+        call print 1 //should print out 1
+        r10 <-  %saved //3
+        r10 += 100 // 103
+        r10 <- r10 <= 1000 // r10 = 1
+        rdi <- r10
+        rdi <<= 1
+        rdi +=1 // rdi =3
+        call print 1 //should print out 1
+        rdi <- 10001 
+        cjump rdi = 10001 :rightbranch
+        :wrongbranch
+        rdi <- 111
+        call print 1  // 55
+        :rightbranch
+        call print 1 // 5000
+        rdi <- 1
+        rsi <- 2
+        rdx <- 3
+        rcx <- 4
+        r8 <- 5
+        r9 <- 6
+        mem rsp -8 <- :alotofargsret
+        mem rsp -16 <- 7
+        mem rsp -24 <- 8
+        call :alotofargs 8
+        :alotofargsret
+        rdi <- rax
+        call print 1
+        return)
+    (:alotofargs
+        8 
+        %saved <- rdi
+        rax <- %saved //1
+        rax += rdi //2
+        rax += rsi // 4
+        rax += rdx //7
+        rax += rcx // 11
+        rax += r8 // 16
+        rax += r9 // 22
+        //rax += mem rsp 8
+        %secondlast <- stack-arg 8
+        rax += %secondlast // 29
+        rax <<= 1
+        rax += 1 //adj for printing
+        // save rax 
+       %saved <- rax
+        rdi <- 3
+        rsi <- 100
+        rdx <- 4
+        mem rsp -8 <- :tensorreturn
+        call :tensors 3
+        :tensorreturn
+        rax <- %saved
+        return  )
+     (:tensors 
+        3
+        rdi <<= 1
+        rdi += 1
+        rsi <<= 1
+        rsi += 1
+    //    rsi <- 7
+        %temp1 <- rdi
+        %temp2 <- rsi
+        %temp3 <- rdx
+        call allocate 2
+        rdi <- %temp1
+        rsi <- %temp2
+        rdx <- %temp3
+        rdx <<= 1
+        rdx += 1
+        rdi <- rdx
+        rsi <- rax
+        call allocate 2
+        rdi <- rax
+        call print 1
+        return )
+     )
+
+//Expected Output
+//154
+//1
+//1
+//5000
+//{s:4, {s:3, 100, 100, 100}, {s:3, 100, 100, 100}, {s:3, 100, 100, 100}, {s:3, 100, 100, 100}}
+//29

@@ -1,0 +1,7 @@
+(:go
+	0 1
+	%S0 <- mem rsp 0
+	mem %S0 8 += %S0
+	mem rsp 0 <- %S0
+	return
+)

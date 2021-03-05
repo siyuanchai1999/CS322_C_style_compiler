@@ -1,0 +1,44 @@
+(:go
+(:go
+	0 0
+	call input 0
+	rax >>= 1
+	r13 <- rax
+	cjump r13 <= 0 :INVALID
+	cjump r13 = 1 :BASE
+	rdi <- 3
+	call print 1
+	cjump r13 = 2 :BASE
+	rdi <- 3
+	call print 1
+	r12 <- 3
+	r15 <- 1
+	r14 <- 1
+	rbx <- r15
+	rbx += r14
+:WHILE_LOOP
+	cjump r13 <= r12 :END
+	rdi <- rbx
+        rdi <<= 1
+        rdi ++
+        call print 1
+	r15 <- r14
+	r14 <- rbx
+	rbx <- r15
+	rbx += r14
+	r12 += 1
+	goto :WHILE_LOOP
+:END
+	rbx <<= 1
+	rbx ++
+	rdi <- rbx
+	goto :PRINT
+:BASE
+	rdi <- 3
+	goto :PRINT
+:INVALID
+	rdi <- 1
+:PRINT
+	call print 1
+	return
+))

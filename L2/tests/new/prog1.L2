@@ -1,0 +1,71 @@
+//Minimum function + encoding and decoding
+//Adaptation in L2
+
+(:go
+    (:go
+        0
+        
+        %test1 <- 101
+        %test2 <- 231
+
+        rdi <- %test1
+        rsi <- %test2
+
+        mem rsp -8 <- :decode_ret1
+        call :decode 1
+        :decode_ret1
+        %decode1 <- rax
+
+        rdi <- rsi
+        mem rsp -8 <- :decode_ret2
+        call :decode 1
+        :decode_ret2
+        %decode2 <- rax
+
+        rdi <- %decode1
+        rsi <- %decode2
+        
+        mem rsp -8 <- :min_ret
+        call :min 2
+        :min_ret
+        rdi <- rax
+
+        mem rsp -8 <- :encode_ret 
+        call :encode 1
+        :encode_ret
+        rdi <- rax
+        call print 1
+        return
+    )
+    (:encode
+        1
+        %num <- rdi
+        %num  <<= 1
+        %num += 1 
+        rax <- %num
+        return
+    )
+    (:decode
+        1
+        %num <- rdi
+        %num >>= 1
+        rax <- %num
+        return
+    )
+    (:min
+        2
+        %a <- rdi
+        %b <- rsi
+        cjump %a < %b :true
+        
+        rax <- %b
+        goto :ret
+        
+        :true
+        rax <- %a
+        goto :ret
+        
+        :ret 
+        return
+    )
+)

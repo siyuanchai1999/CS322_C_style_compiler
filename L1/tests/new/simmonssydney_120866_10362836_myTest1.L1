@@ -1,0 +1,33 @@
+(:test1
+ (:test1
+  5 4
+  rax <- 7
+  rax *= 4
+  return
+ )
+)
+
+(:test2
+ (:test2
+  6 6
+  r10 += mem rsp 8
+  rbx *= 6
+  rax <- mem rbp 8
+  r11 <- rbx <= rax 
+  return
+ )
+)
+
+(
+ (
+  8 9 
+rcx <- mem rsp 8
+rbx >>= rcx
+r11 <- 8
+r12 <- 9
+r8 <- rbx <= r11
+r9 <- rbx <= r12
+rsi <- r8 = r9
+return
+ )
+)

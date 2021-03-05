@@ -1,0 +1,31 @@
+(:go
+	(:go
+	0 0
+
+	rdi <- 5
+	rsi <- 7
+	call allocate 2
+	rdi <- rax
+	call print 1
+
+	rdi <- 5
+	rsi <- rax
+	call allocate 2
+	rdi <- rax	
+	call print 1
+	
+	rdi <- 5
+	rsi <- 3
+	call allocate 2
+	rdi <- rax
+	call print 1
+
+	rdi <- 5
+	rsi <- rax
+	call allocate 2
+	rdi <- rax
+	call print 1	
+
+	return 
+	)
+)

@@ -1,0 +1,53 @@
+(:test2
+(:test2
+	0 1
+	r12 <- 0
+	r13 <- 2
+	r14 <- 2
+	rsi <- 1
+	mem rsp 0 <- rsi
+	call print 1
+	rdi <- 3
+	rsi <- mem rsp 0
+	mem rsp 0 <- rsi
+	rsi <- 900099
+	mem rsp 0 <- rsi
+	rsi <- mem rsp 0
+	rsi >>= 5
+	mem rsp 0 <- rsi
+	rsi <- mem rsp 0
+	rsi -= 78
+	mem rsp 0 <- rsi
+	rsi <- mem rsp 0
+	rsi *= 8
+	mem rsp 0 <- rsi
+	rsi <- mem rsp 0
+	mem rsp 0 <- rsi
+	:fibonacci
+	call print 1
+	rdi <- r12
+	mem rsp 0 <- rdi
+	rdi <- mem rsp 0
+	rdi += r13
+	mem rsp 0 <- rdi
+	rdi <- mem rsp 0
+	rdi += 1
+	mem rsp 0 <- rdi
+	rdi <- mem rsp 0
+	rdi -= 1
+	mem rsp 0 <- rdi
+	rdi <- mem rsp 0
+	rdi += 1
+	mem rsp 0 <- rdi
+	r12 <- r13
+	rdi <- mem rsp 0
+	r13 <- rdi
+	r13 -= 1
+	r14 += 2
+	rdi <- mem rsp 0
+	rdi <- rdi
+	cjump r14 <= 22 :fibonacci
+	return
+)
+
+)

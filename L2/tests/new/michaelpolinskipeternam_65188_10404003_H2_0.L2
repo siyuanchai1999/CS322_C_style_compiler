@@ -1,0 +1,41 @@
+(:main
+  (:main
+    0
+    call input 0
+    rax --
+    rax >>= 1
+    rdi <- rax
+    mem rsp -8 <- :fibb_ret
+    call :fibb 1
+    :fibb_ret
+    rdi <- rax
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return
+  )
+
+  (:fibb
+    1
+    %curr <- 0 
+    %next <- 1 
+    rax <- 0 
+    cjump rdi = 0 :FIBB_DONE 
+    cjump rdi = 1 :FIBB_DONE1 
+    :FIBB_LOOP
+    %temp <- %next
+    %next += %curr
+    %curr <- %temp
+    rdi -= 1
+    cjump rdi = 1 :FIBB_DONE 
+    goto :FIBB_LOOP
+    
+    :FIBB_DONE
+    rax <- %next
+    return
+
+    :FIBB_DONE1
+    rax <- 1
+    return
+  )
+)

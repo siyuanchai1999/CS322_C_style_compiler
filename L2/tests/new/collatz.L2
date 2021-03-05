@@ -1,0 +1,71 @@
+(:run_2
+  (:run_2
+    0
+    //get a number, print the encoded version of that number ((n<<1)+1)
+    call input 0
+    rdi <- rax
+    rdi <<= 1
+    rdi += 1
+    call print 1
+
+    //get a new number, print the results of running the collatz function on it.
+    call input 0
+    r12 <- rax
+    
+    rdi <- 7 //3 elements
+    rsi <- 1 //0 encoded
+    call allocate 2 //allocate array to pass to :collatz
+
+    rdi <- r12
+    rsi <- rax
+    mem rsp -8 <- :collatz_ret
+    call :collatz 2
+    :collatz_ret
+
+    rdi <- rax
+    call print 1
+    
+    return
+  )
+
+  (:collatz //[just google the collatz conjecture] takes a number and an array and prints the original number and each subsequent number in the series following the collatz function thing, and then returns an array of [number of total steps, number of steps through even numbers, number of steps through odd numbers]
+    2
+    %arrayLoc <- rsi
+    %num <- rdi
+    %num >>= 1
+
+    :collatz_test
+    %temp <- %num
+    %temp <<= 1
+    %temp++
+
+    rdi <- %temp
+    call print 1
+
+    cjump %num <= 1 :collatz_end
+    
+    mem %arrayLoc 8 += 2 //increment encoded int
+    
+    %temp <- %num
+    %temp &= 1
+    cjump %temp = 1 :collatz_odd
+
+    //collatz_even
+    mem %arrayLoc 16 += 2 //increment encoded int
+    
+    %num >>= 1
+    goto :collatz_test
+
+    :collatz_odd
+    mem %arrayLoc 24 += 2 //increment encoded int
+
+    %num *= 3
+    %num += 1
+    goto :collatz_test
+
+    :collatz_end
+    rax <- %arrayLoc
+    return
+  )
+  
+)

@@ -1,0 +1,66 @@
+// Fibonacci example
+// Author: Tommy McMichen
+// Description: the following program is a
+//   recursive implementation of the Fibonacci
+//   algorithm written in the L1 language for CS322.
+
+(:main
+  (:main
+    // argument is fibonacci term
+    1 0
+    
+    // call sum_arr on the built array.
+    call fib 1
+
+    // print the result.
+    r10 <- rax
+    r10 <<= 1
+    rdi <- r10
+    call print 1
+    return
+  )
+  (:fib
+    // argument is fibonacci term
+    1 0
+
+    cjump rdi = 1 :term_1
+    cjump rdi = 0 :term_0
+
+    //ELSE
+    // val1 = fib(i-1)
+    rdi -= 1
+
+    // save rdi
+    mem rsp 0 <- rdi
+    call :fib 1
+
+    // restore rdi
+    rdi <- mem rsp 0
+    
+    // val2 = fib(i-2)
+    rdi -= 1
+    
+    // save val1(rax)
+    mem rsp 0 <- rax
+    call :fib 1
+
+    // restore val1(r10)
+    r10 <- mem rsp 0
+
+    // val = val1 + val2
+    rax += r10
+    return
+
+    //IF arg=1
+    // return 1
+    :term_1
+    rax <- 1
+    return
+
+    //IF arg=0
+    // return 0
+    :term_0
+    rax <- 0
+    return
+  )
+)

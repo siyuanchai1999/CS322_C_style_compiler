@@ -1,0 +1,47 @@
+(:go
+(:go
+    0 0
+    rbx <- 1
+    call input 0 :POST_INPUT
+:POST_INPUT
+    rax >>= 1
+    rbp <- rax
+    rax <- 0
+:FOR_COND
+    cjump rbx = rbp :END
+    r12 <- rax
+    rdi <- rbx
+    rsi <- 3
+    mem rsp -8 <- :CHECK
+    call :divisible 2
+:CHECK
+    cjump rax < r12 :NEXT
+    rsi <- 5
+    mem rsp -8 <- :NEXT
+    call :divisible 2
+:NEXT
+    rbx += 1
+    goto :FOR_COND
+:END
+    rax <<= 1
+    rax ++
+    rdi <- rax
+    call print 1
+    return
+    )
+(:divisible
+    2 0
+    r10 <- 1
+:LOOP
+    r11 <- r10
+    r11 *= rsi
+    cjump r11 = rdi :FOUND
+    cjump rdi < r11 :NOT_FOUND
+    r10 += 1
+    goto :LOOP
+:FOUND
+    rax += rdi
+:NOT_FOUND
+    return
+    )
+)

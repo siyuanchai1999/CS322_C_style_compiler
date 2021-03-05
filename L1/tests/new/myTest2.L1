@@ -1,0 +1,35 @@
+(:go
+	(:go
+	0 0
+	
+	rdi <- 1
+	call print 1
+	
+	rdi >>= 1
+	rdi++
+	rdi <<= 1
+	rdi++
+	call print 1
+	
+	rdi >>= 1
+	rdi++
+	rdi <<= 1
+	rdi++
+	call print 1
+
+	rdi <- 1
+	call print 1
+
+	mem rsp -8 <- :ret
+	call :test 0
+	
+	:ret
+	call print 1	
+	return
+	)	
+
+	(:test
+	0 0
+	return
+	)	
+)

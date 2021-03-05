@@ -1,0 +1,63 @@
+(:set_print_array
+  (:set_print_array
+    0 0
+    
+    // allocate array with two elements
+    rdi <- 5
+    rsi <- 0
+    call allocate 2
+  
+    // set array values
+    mem rsp -8 <- :set_ret
+    rdi <- rax
+    call :set_array 1
+    :set_ret
+
+    // print array values
+    rdi <- rax
+    mem rsp -8 <- :print_ret
+    call :print_array 1
+    :print_ret
+
+    return
+  )
+  (:set_array
+    1 3
+    mem rsp 0 <- r12
+    mem rsp 8 <- r13
+    mem rsp 16 <- r14
+    r12 <- rdi
+    //call input 0
+    rax <- 5
+    r13 <- rax
+    //call input 0
+    rax <- 7
+    r14 <- rax
+    mem r12 8 <- r13
+    mem r12 16 <- r14
+    rax <- r12
+    
+    r12 <- mem rsp 0
+    r13 <- mem rsp 8
+    r14 <- mem rsp 16
+    return  
+  )
+  (:print_array
+    1 3
+    mem rsp 0 <- r12
+    mem rsp 8 <- r13
+    mem rsp 16 <- r14
+    r12 <- rdi
+    r13 <- mem r12 8
+    r14 <- mem r12 16
+    rdi <- r13
+    call print 1
+    rdi <- r14
+    call print 1    
+    rax <- r12
+    r12 <- mem rsp 0
+    r13 <- mem rsp 8
+    r14 <- mem rsp 16
+    return
+  )
+)

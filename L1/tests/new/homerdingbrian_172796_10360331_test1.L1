@@ -1,0 +1,57 @@
+(:main
+  (:main
+    0 0 
+    // Lets check our instructions
+    // Store 3 into rax
+    rax <- 5
+    rbx <- :my_label1
+    rbp <- 3
+    rax += rbp
+    // Should jump
+    cjump rax = 8 :my_label1
+
+
+    :my_label2
+    // more math
+    rax -= 4
+    rax *= 3
+    rdi <- rax
+    rdi <<= 1
+    rdi++
+    // Should print 12
+    call print 1
+
+    r10 @ rbp rax 4
+    // Allocate array of size 2 with value 3
+    rdi <- 5
+    rsi <- 7
+    // Discarding our rax value
+    call allocate 2
+    r14 <- rax
+    // Store parameter
+    rdi <- rbp
+    // Encode
+    rdi <<= 1
+    rdi++
+    // Should print 4
+    call print 1
+
+    // Should be false
+    r12 <- rbp < 2
+    rdi <- r12
+    rdi <<= 1 
+    rdi++
+    call print 1
+
+    // Now lets check out array
+    rdi <- r14
+    call print 1
+    return
+
+    :my_label1
+    // increment to 4
+    rbp++
+    goto :my_label2
+    return 
+  )
+)

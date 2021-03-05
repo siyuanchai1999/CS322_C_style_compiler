@@ -1,0 +1,66 @@
+(:main 
+  (:main
+    0 
+    call input 0 
+    rax --
+    rax >>= 1
+    %target <- rax
+    rdi <- 21
+    rsi <- 1
+    call allocate 2
+    %count <- 0
+    %arr_idx <- rax
+    %arr_idx += 8
+    :FILL_LOOP
+    mem %arr_idx 0 <- %count
+    %count ++
+    %arr_idx += 8 
+    cjump %count < 10 :FILL_LOOP
+
+
+    %left <- 0
+    %right <- mem rax 0
+    %right --
+
+    :BIN_SEARCH
+    cjump %right < %left :NOT_FOUND
+    %mid <- %left
+    %mid += %right
+    %mid >>= 1
+    
+    %arr_idx <- rax
+    %arr_idx += 8
+    %arr_idx @ %arr_idx %mid 8
+    
+    %value <- mem %arr_idx 0
+
+    cjump %value = %target :FOUND
+    cjump %value < %target :GREATER
+
+    %mid --
+    %right <- %mid 
+    goto :BIN_SEARCH
+
+    :GREATER
+    %mid ++
+    %left <- %mid
+    goto :BIN_SEARCH
+    
+    :NOT_FOUND
+    rax <- -1
+    rdi <- rax
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return
+    
+    :FOUND
+    rax <- %mid
+    rdi <- rax
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return 
+
+  )
+)

@@ -1,0 +1,35 @@
+(:main
+  (:main
+    0
+    :top
+    call input 0
+    cjump rax = 1 :ret
+    rdi <- rax
+    mem rsp -8 <- :perf_sqr_ret
+    call :perf_sqr 1
+    :perf_sqr_ret
+    rdi <- rax
+    rbx <- rdi
+    call print 1
+    goto :top
+    :ret
+    return)
+  (:perf_sqr
+    1
+    cjump rdi < 1 :end
+    rdi >>= 1
+    %counter <- 1
+    %squared <- 1
+    rax <- 3
+    cjump rdi = 1 :end
+    goto :condition
+    :body
+    %squared <- %counter
+    %squared *= %squared
+    cjump %squared = rdi :end
+    %counter += 1
+    :condition
+    cjump %squared < rdi :body
+    rax <- 1
+    :end
+    return))

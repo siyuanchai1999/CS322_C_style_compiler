@@ -1,0 +1,92 @@
+// Computes dot product of two vectors of <input> length of form 
+// [-1,1,3,...] and [0, 2, 4,...]
+(:go
+    (:dotProd
+        1 
+        
+        %len <- rdi                    
+                    
+        rdi <<= 1                           //%odd_arr = malloc(%len, 0)
+        rdi += 1                            //convert to L1 convention
+        rsi <- 0 
+        call allocate 2
+        %odd_arr <- rax
+
+        rdi <- %len                         //%even_arr = malloc(%len, 0)
+        rdi <<= 1                           //convert to L1 convention
+        rdi += 1
+        rsi <- 0
+        call allocate 2
+        %even_arr <- rax
+                                                    //for (int i = 0; i < len; i++)
+        %i <-  0                                    
+        :loop1_begin
+        cjump %len <= %i  :loop1_exit               // enter loop if %i < %len
+
+        r9 <- %i
+        r9 += 1
+
+        %toAssign <- %i                                   // %odd_arr[i] = 2 * i - 1;
+        %toAssign *= 2
+        %toAssign -= 1
+
+        %offset @ %odd_arr r9 8                              // %offset = %odd_arr + 8 * (i + 1) one more space at the beginning of allocate array
+        mem %offset 0 <- %toAssign                                  
+                                                    
+        %toAssign <- %i                                     // %even_arr[i] = 2 * i;
+        %toAssign *= 2
+
+        %offset @ %even_arr r9 8                              // %offset = %even_arr + 8 * (i + 1) one more space at the beginning of allocate array
+        mem %offset 0 <- %toAssign
+
+        %i += 1
+        goto :loop1_begin
+        :loop1_exit
+        
+        //rdi <- rbx
+        //call print 1
+        //rdi <- rbp
+        //call print 1
+
+        %res <- 0
+
+                                                    //for (int i = 0; i < len; i++)
+        %i <-  0                                   //r10 caller saved, int i
+        :loop2_begin
+        cjump %len <= %i  :loop2_exit               // enter loop if %i < %len  
+
+        r9 <- %i
+        r9 += 1
+
+        %offset @ %odd_arr r9 8                              // %res += odd[i] * even[i]
+        %prod <- mem %offset 0                                  
+        %offset @ %even_arr r9 8                              
+        %prod *= mem %offset 0
+        
+        %res += %prod
+        
+        %i += 1
+        goto :loop2_begin
+        :loop2_exit
+
+        :done
+        rax <- %res
+        return    
+    )
+
+    (:go
+        0 
+        rdi <- 11   
+        mem rsp -8 <- :dotProd_finish
+        call :dotProd 1
+        :dotProd_finish
+
+        rdi <- rax
+        rdi <<= 1
+        rdi += 1
+        call print 1
+        
+        rax <- 0
+        return
+    )
+)

@@ -1,0 +1,44 @@
+//Fibonacci Number Sequence
+//Takes in one parameter n and returns the first n (including 0th) fibonacci number
+(:fib
+  (:fib
+    0 0
+    rdi <- 10
+    mem rsp -8 <- :rtn1
+    call :array 1
+    :rtn1
+    return
+  )
+  (:array
+    1 0
+    rbx <- rdi
+    r15 <- -1
+    cjump rbx <= r15 :array_end
+    r15 += 1
+    rdi <- 1
+    rdi <<= 1
+    rdi += 1
+    call print 1
+    cjump rbx <= r15 :array_end
+    r15 += 1
+    rdi <- 1
+    rdi <<= 1
+    rdi += 1
+    call print 1
+    r13 <- 1
+    r14 <- 1
+    :array_begin
+    cjump rbx <= r15 :array_end
+    r15 += 1
+    rdi <- r13
+    rdi += r14
+    r13 <- r14
+    r14 <- rdi
+    rdi <<= 1
+    rdi += 1
+    call print 1
+    goto :array_begin
+    :array_end
+    return
+  )
+)

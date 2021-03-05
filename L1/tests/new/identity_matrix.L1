@@ -1,0 +1,46 @@
+// Create a 3 by 3 identity matrix
+// output: {s:3, {s:3, 1, 0, 0}, {s:3, 0, 1, 0}, {s:3, 0, 0, 1}}
+
+(:identity
+(:identity 
+	0 0
+	rdi <- 7
+	rsi <- 1
+	call allocate 2
+	r12 <- rax
+
+	r9 <- mem r12 8
+	r9 += 2
+	mem r12 8 <- r9
+
+	rdi <- 7
+	rsi <- 1
+	call allocate 2
+	r13 <- rax
+
+	r9 <- mem r13 16
+	r9 += 2
+	mem r13 16  <- r9
+
+	rdi <- 7
+	rsi <- 1
+	call allocate 2
+	r14 <- rax
+
+	r9 <- mem r14 24
+	r9 += 2
+	mem r14 24 <- r9
+
+	rdi <- 7
+	rsi <- 1
+	call allocate 2
+	rdi <- rax	
+
+	mem rdi 8 <- r12
+	mem rdi 16 <- r13
+	mem rdi 24 <- r14	
+	
+	call print 1
+	return
+)
+)

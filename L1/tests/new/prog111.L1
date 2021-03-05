@@ -1,0 +1,57 @@
+//Minimum function + encoding and decoding
+
+(:go
+    (:go
+        0 0
+        rdi <- 101
+        rsi <- 231
+
+        mem rsp -8 <- :decode_ret1
+        call :decode 2
+        :decode_ret1
+        r10 <- rax
+
+        rdi <- rsi
+        mem rsp -8 <- :decode_ret2
+        call :decode 2
+        :decode_ret2
+        r11 <- rax
+
+        rdi <- r10
+        rsi <- r11
+        
+        mem rsp -8 <- :min_ret
+        call :min 2
+        :min_ret
+        rdi <- rax
+
+        mem rsp -8 <- :encode_ret 
+        call :encode 1
+        :encode_ret
+        rdi <- rax
+        call print 1
+        return
+    )
+    (:encode
+        1 0
+        rax <- rdi
+        rax <<= 1
+        rax += 1
+        return
+    )
+    (:decode
+        1 0
+        rdi >>= 1
+        rax <- rdi
+        return
+    )
+    (:min
+        2 0
+        rax <- rdi
+        cjump rdi < rsi :true
+        rax <- rsi
+        :true
+        return
+    )
+)
+

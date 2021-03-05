@@ -1,0 +1,76 @@
+// get 2 numbers i and j from user, generates a matrix of dimensions ixj
+// fills the matrix with numbers 1 through i*j
+
+// note: i and j are expected to be >= 0
+
+(:matrix
+  (:matrix
+    0 0
+
+    // create a zero-filled matrix with the desired dimensions and unique rows
+
+    // sample values are manually assigned instead of relying on user input
+    r12 <- 9
+    r13 <- 7
+    //call input 0
+    //r12 <- rax // num rows
+    //call input 0
+    //r13 <- rax // num cols
+
+    cjump r12 <= 1 :abort
+    cjump r13 <= 1 :abort
+
+    rdi <- r12
+    rsi <- 0 // placeholder until memory addresses can be generated
+    call allocate 2
+    r14 <- rax // matrix start
+    rax += 8
+    r15 <- rax // duplicate for actual use, begins at first element
+
+    :gen_rows
+    cjump r12 <= 1 :fill
+    rdi <- r13
+    rsi <- 1
+    call allocate 2
+    mem r15 0 <- rax
+    r15 += 8
+    r12 -= 2
+    goto :gen_rows
+
+    // fill the matrix with values
+
+    :fill
+    r15 -= 8 // points to last row of the matrix
+    r12 <- mem r14 0 // num rows (raw)
+    r13 <- mem r14 8
+    r13 <- mem r13 0 // num cols (raw)
+    rbx <- r12
+    rbx *= r13
+    rbx <<= 1
+    rbx ++ // num rows * num cols (value encoded)
+
+    :outer_loop
+    cjump r15 <= r14 :end
+    r10 <- mem r15 0
+    r11 <- r13
+    r11 *= 8
+    r10 += r11
+    r11 <- mem r15 0
+    :inner_loop
+    cjump r10 <= r11 :end_inner
+    mem r10 0 <- rbx
+    r10 -= 8
+    rbx -= 2
+    goto :inner_loop
+    :end_inner
+    r15 -= 8
+    goto :outer_loop
+
+    :end
+    rdi <- r14
+    call print 1
+
+    :abort
+    return
+  )
+)

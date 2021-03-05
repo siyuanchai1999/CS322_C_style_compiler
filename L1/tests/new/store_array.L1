@@ -1,0 +1,70 @@
+(:main
+
+    (:encode_int
+        1 0
+        cjump rdi = 0 :special
+        rdi <<= 1
+        :special
+        rdi ++
+        rax <- rdi
+        return
+    )
+
+    (:create_array
+        0 1
+
+        //ask for amount of elements in array
+        //call input 0
+	rax <- 15 //simulate input of 7
+        r10 <- rax
+
+        //encode 0 and fill array with preliminary 0's
+        rdi <- 0
+        mem rsp -8 <- :enc_ret
+        call :encode_int 1
+        :enc_ret
+
+        rdi <- r10
+        rsi <- rax
+
+        call allocate 2
+
+        return
+
+    )
+
+    (:main
+        0 0
+        mem rsp -8 <- :func_ret
+        call :create_array 0
+        :func_ret
+        r12 <- rax //array stored here
+
+        rdi <- mem r12 0
+        mem rsp -8 <- :return_addr
+        call :encode_int 1
+        :return_addr
+        r13 <- rax //size of array encoded
+        r13 >>= 1
+
+        r15 <- 0
+
+        cjump r13 = 0 :print_array
+
+        :input_loop
+        r15++
+        //call input 0
+	rax <- 11 //simulating input of 5
+        rbx @ r12 r15 8
+        mem rbx 0 <- rax
+
+        cjump r15 < r13 :input_loop
+
+        :print_array
+
+        //print array
+        rdi <- r12
+        call print 1
+        return
+    )
+)

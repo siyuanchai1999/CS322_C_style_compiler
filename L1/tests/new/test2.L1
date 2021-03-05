@@ -1,0 +1,34 @@
+(:tensors
+  (:tensors 0 0
+  rdi <- 3
+  rsi <- 7
+  call allocate 2
+  rdi <- rax
+  call print 1
+  rdi <- 3 //this is a comment
+  rsi <- 5
+  call allocate 2
+  rdi <- 7
+  rsi <- rax
+  call allocate 2
+  rdi <- 9
+  rsi <- rax
+  call allocate 2
+  rdi <- rax
+  call print 1
+  r10 <- 123
+  r11 <- 5
+  rdi <- 5
+  :start
+  r10 >>= 3
+  rdi += 3
+  cjump r11 <= r10 :start
+  call print 1
+  rdi <- 15
+  rdi *= 5
+  rdi &= 31
+  cjump rdi = 1023 :start
+  call print 1
+  return
+  )
+)

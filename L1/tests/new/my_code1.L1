@@ -1,0 +1,47 @@
+(:go
+    (:go
+     0 0
+    r15 <- 66 // the number to be guessed
+
+    // loop if guess the wrong number
+    :too_large_ret  
+    :too_small_ret
+    call input 0
+
+    // input convert
+    rcx <- 1
+    rax >>= rcx
+    r14 <- rax
+    cjump r14 = r15 :correct_guess // if correct then end
+    cjump r14 < r15 :is_smaller
+    mem rsp -8 <- :too_large_ret
+    call :too_large 0
+    :is_smaller
+    mem rsp -8 <- :too_small_ret
+    call :too_small 0
+
+    :correct_guess
+
+    // output convert
+    rcx <- 1
+    r14 <<= rcx
+    r14 += 1
+    rdi <- r14
+    call print 1
+    return
+    )
+
+    (:too_large
+     0 0
+    rdi <- 3    // print 1, the rdi is not stored before calling print function because it is useless later
+    call print 1
+    return
+    )
+
+    (:too_small
+     0 0
+    rdi <- 1    // print 0, the rdi is not stored before calling print function because it is useless later
+    call print 1
+    return
+    )
+)

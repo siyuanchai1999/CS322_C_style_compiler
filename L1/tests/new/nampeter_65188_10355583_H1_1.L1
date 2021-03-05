@@ -1,0 +1,41 @@
+(:main
+  (:main
+    0 0 
+    rdi <- 5
+    rsi <- 7
+    call allocate 2
+    rdi <- rax
+    r12 <- rax
+    call print 1
+    rdi <- r12
+    rsi <- 1
+    rdx <- 1
+    mem rsp -8 <- :replace_ret
+    call :replaceElement 3
+    :replace_ret
+    rdi <- r12
+    call print 1
+    return
+  )
+
+  (:replaceElement
+    3 0
+    r10 <- mem rdi 0
+    cjump r10 < rsi :OOB
+    rsi ++
+    rdi @ rdi rsi 8
+    mem rdi 0 <- rdx
+    return
+    
+    :OOB
+    rdi <- 25
+    rdi <<= 1
+    rdi ++
+    rsi <- r10
+    rsi --
+    rsi <<= 1
+    rsi ++
+    rdx <- rsi
+    call tensor-error 3
+  )
+)

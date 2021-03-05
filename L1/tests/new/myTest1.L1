@@ -1,0 +1,32 @@
+(:go
+	(:go
+	0 0
+	
+	rdi <- 1
+	rsi <- 3
+	rdx <- 5
+	rcx <- 7
+	r8 <- 9
+	r9 <- 11
+	r10 <- 13
+	r11 <- 15
+	r12 <- 17
+	r13 <- 19
+	r14 <- 21
+	r15 <- 23
+	rbp <- 25
+	rbx <- 27
+
+	rdx *= rcx
+	r11 &= r12
+	r8 -= rsi
+	rbx++
+	rbp--
+	
+	rdi <- 7
+	call allocate 2
+	rdi <- rax
+	call print 1
+	return
+	)
+)

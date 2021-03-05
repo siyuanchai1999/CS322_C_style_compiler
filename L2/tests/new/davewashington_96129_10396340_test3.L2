@@ -1,0 +1,68 @@
+(:go
+(:go 0
+    call input 0
+    rax >>= 1
+    %left <- rax
+
+:LOOP
+    cjump %left = 1 :END
+    rdi <- %left
+    mem rsp -8 <- :POST
+    call :is_prime 1
+
+:POST
+    cjump rax = 1 :ITER
+    rdi <- %left
+    rdi <<= 1
+    rdi ++
+    call print 1
+
+:ITER
+    %left --
+    goto :LOOP
+
+:END
+    return
+)
+
+(:is_prime 1
+    rax <- 0
+    cjump rdi = 2 :END2
+    %divisor <- 2
+    %rax <- 1
+
+:FOR
+    cjump %divisor = rdi :END2
+    rsi <- %divisor
+    mem rsp -16 <- %divisor
+    mem rsp -8 <- :POST2
+    call :divisible 2
+
+:POST2
+    %divisor <- mem rsp -16
+    cjump rax = 1 :END2
+    %divisor ++
+    goto :FOR
+
+:END2
+    return
+)
+
+(:divisible 2
+    rax <- 0
+    %mult <- 1
+
+:LOOP2
+    %answer <- %mult
+    %answer *= rsi
+    cjump %answer = rdi :FOUND
+    cjump rdi < %answer :NOT_FOUND
+    %mult ++
+    goto :LOOP2
+
+:FOUND
+    rax <- 1
+
+:NOT_FOUND // rax remains 0 if not falling through from :FOUND
+    return
+))

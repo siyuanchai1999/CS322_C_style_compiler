@@ -1,0 +1,54 @@
+(:go
+(:go 0
+    %counter <-1
+    call input 0
+
+:POST_INPUT
+    rax >>= 1
+    %end <- rax
+    rax <- 0
+
+:FOR_COND
+    cjump %counter = %end :END
+    r12 <- rax
+    rdi <- %counter  // Divisor
+    rsi <- 3    // Dividend
+    mem rsp -8 <- :CHECK     // may need to alter
+    call :divisible 2
+
+:CHECK
+    cjump rax < r12 :NEXT
+    rsi <- 5
+    mem rsp -8 <- :NEXT
+    call :divisible 2
+
+:NEXT
+    %counter ++
+    goto :FOR_COND
+
+:END
+    rax <<= 1
+    rax ++
+    rdi <- rax
+    call print 1
+    return
+)
+
+(:divisible 2
+    %incr <- 1
+    
+:LOOP
+    r11 <- %incr
+    r11 *= rsi
+    cjump r11 = rdi :FOUND
+    cjump rdi < r11 :NOT_FOUND
+    %incr ++
+    goto :LOOP
+
+:FOUND
+    rax += rdi
+
+:NOT_FOUND
+    return
+))
+    

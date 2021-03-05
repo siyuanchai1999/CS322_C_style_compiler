@@ -1,0 +1,49 @@
+(:go
+    (:go 0
+    call input 0
+    rax >>= 1
+    %limit <- rax
+    cjump %limit <= 0 :INVALID
+    cjump %limit = 1 :BASE
+    rdi <- 3
+    call print 1
+    cjump %limit = 2 :BASE
+    rdi <- 3
+    call print 1
+    %counter <- 3
+    %a <- 1
+    %b <- 1
+    %c <- %a
+    %c += %b
+
+:WHILE_LOOP
+    cjump %limit <= %counter :END
+    rdi <- %c
+    rdi <<= 1
+    rdi ++
+    call print 1
+    %a <- %b
+    %b <- %c
+    %c <- %a
+    %c += %b
+    %counter ++
+    goto :WHILE_LOOP
+
+:END
+    %c <<= 1
+    %c ++
+    rdi <- %c
+    goto :PRINT
+
+:BASE
+    rdi <- 3
+    goto :PRINT
+
+:INVALID
+    rdi <- 1
+
+:PRINT
+    call print 1
+    return
+    )
+)

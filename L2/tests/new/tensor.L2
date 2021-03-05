@@ -1,0 +1,55 @@
+(:print_tensor
+  (:print_tensor
+    0
+    :input
+    call input 0 //get input for number of sub-arrays in tensor
+    cjump rax = 1 :input
+    %topSize <- rax
+
+    call input 0 //get input for size of sub-arrays
+    cjump rax = 1 :input
+    %subSize <- rax
+
+    rdi <- %subSize
+    rsi <- 1 //encoded 0
+    call allocate 2 //allocate sub-array
+    %defaultArray <- rax
+
+    rdi <- %topSize
+    rsi <- %defaultArray
+    call allocate 2 //allocate array of 3 pointers, initializing them to the previously allocated array
+    %arrayLoc <- rax
+
+    rdi <- %arrayLoc
+    call print 1
+
+    %numSubs <- 0
+
+    :allocate_subarray
+    cjump %topSize = 1 :modify_first_subarray
+    cjump %topSize < 1 :end
+    rdi <- %subSize
+    rsi <- 1 //encoded 0
+    call allocate 2
+    %currLoc <- rax
+    %numSubs++
+    %nextElem @ %arrayLoc %numSubs 8 //address of the next element in the main array
+    mem %nextElem 0 <- %currLoc
+
+
+    %temp <- %topSize
+    %temp >>= 1
+    cjump %numSubs < %temp :allocate_subarray
+
+    :modify_first_subarray
+    %firstElemTop <- mem %arrayLoc 8 //first element in top-level array, also address of first sub-array
+    %firstElemSub <- mem %firstElemTop 8 //first element in first sub-array
+    %firstElemSub += 2 //add 1 to encoded int
+    mem %firstElemTop 8 <- %firstElemSub
+
+    :end
+    rdi <- %arrayLoc
+    call print 1
+    return
+  )
+)

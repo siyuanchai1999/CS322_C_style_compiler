@@ -1,0 +1,39 @@
+(:main
+  (:main
+    0
+    call input 0
+    rdi <- rax
+    mem rsp -8 <- :fib_ret
+    call :fib 1
+    :fib_ret
+    rdi <- rax
+    rbx <- rdi
+    call print 1
+    rdi <- rbx
+    mem rsp -8 <- :fib_ret2
+    call :fib 1
+    :fib_ret2
+    rdi <- rax
+    call print 1
+    return)
+  (:fib
+    1
+    rax <- 3
+    cjump rdi <= 3 :end
+    %output <- 1
+    rdi >>= 1
+    %counter <- 1
+    %lastNumber <- 1
+    goto :condition
+    :body    
+    %temp <- %output
+    %output += %lastNumber
+    %lastNumber <- %temp
+    %counter += 1
+    :condition
+    cjump %counter < rdi :body
+    %output <<= 1
+    %output += 1
+    rax <- %output
+    :end
+    return))

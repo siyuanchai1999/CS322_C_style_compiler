@@ -1,0 +1,45 @@
+(:go
+    (:go
+        0 1
+        rdi <- 7
+        rsi <- 7
+        call allocate 2
+        mem rax 8 <- 9          //init array with [9,7,7]
+
+        rdi <- rax 
+        mem rsp 0 <- rax
+        call print 1
+        rax <- mem rsp 0
+
+        rdi <- 7
+        rsi <- rax
+        mem rsp -8 <- :Sum_ret
+        call :Sum 2             //Call sum
+        :Sum_ret
+
+        rax <<= 1
+        rax += 1                //Encode the sum result
+        rdi <- rax
+        call print 1
+
+        return
+    )
+
+    (:Sum
+        2 1
+        mem rsp 0 <- r12
+        r12 <- 1                //r12 is the array index 
+        r11 <- 0                //r11 is the result
+
+        :LOOP                   //calculate the sum
+        r11 += mem rsi 8
+        rsi += 8                //add the address
+        r12 += 2                //add the index
+        cjump r12 <= rdi :LOOP 
+
+        rax <- r11
+        r12 <- mem rsp 0
+        return
+    )
+
+)

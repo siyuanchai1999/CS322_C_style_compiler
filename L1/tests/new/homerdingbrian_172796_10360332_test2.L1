@@ -1,0 +1,77 @@
+(:diffName
+  (:callMe
+    6 3
+
+    mem rsp 0 <- r12
+    mem rsp 8 <- r13
+
+    r12 <- 0
+    r12 += rdi
+    r12 -= rsi
+    r12 *= rdx
+
+    r13 <- 3
+    r13 += rcx
+    r13 += r8
+    r13 += r9
+
+    rdi <- r12
+    rsi <- r13
+
+    //Caller save
+    mem rsp 16 <- rdi
+    mem rsp -8 <- :thenCallMe_ret
+    call :thenCallMe 2
+    :thenCallMe_ret
+    rdi <- mem rsp 16
+    rax += rdi
+    return
+  )
+
+  (:diffName
+    0 9
+    rax <- 1
+    rbx <- 5
+    rbp <- 7
+    r10 <- rax
+    r11 <- r10
+    r12 <- 14
+    r12 <- rbp
+    r14 <- r12 <= 10
+    r15 <- r12 = rbp
+    rdi <- 9
+    rsi <- 11
+    rdx <- rax
+    rcx <- 4
+    r8 <- 2
+    r9 <- -12
+
+    // Caller save
+    mem rsp 0 <- rax
+    mem rsp 8 <- r10
+    mem rsp 16 <- r11
+    mem rsp 24 <- r8
+    mem rsp 32 <- r9
+    mem rsp 40 <- rcx
+    mem rsp 48 <- rdi
+    mem rsp 56 <- rdx
+    mem rsp 64 <- rsi
+
+    mem rsp -8 <- :callMe_ret
+    call :callMe 6
+    :callMe_ret
+
+    rdi <- rax
+    rdi <<= 1
+    rdi++
+    call print 1
+    return
+  )
+
+  (:thenCallMe
+    2 0
+    rdi += rsi
+    rax <- rdi
+    return
+  )
+)

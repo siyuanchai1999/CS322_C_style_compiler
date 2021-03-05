@@ -1,0 +1,61 @@
+// Calculates the factorial of a nonnegative integer
+
+(:main
+  (:main
+    0 0
+    call input 0
+    rdi <- rax
+    rcx <- 1
+    rdi >>= rcx
+    r12 <- rdi
+    cjump rdi = 0 :RETURN
+    mem rsp -8 <- :RET_MUL_FAC
+    call :mul_factorial 1
+    :RET_MUL_FAC
+    rdi <- rax
+    goto :ENCODE
+    :RETURN
+    rdi += 1
+    :ENCODE
+    rcx <- 1
+    rdi <<= rcx
+    rdi += 1
+
+    call print 1
+
+    rdi <- r12
+    mem rsp -8 <- :RET_REC_FAC
+    call :rec_factorial 1
+    :RET_REC_FAC
+    rdi <- rax
+    rcx <- 1
+    rdi <<= rcx
+    rdi += 1
+    call print 1
+    return
+  )
+  (:mul_factorial
+    1 0
+    rax <- 1
+    :LOOP
+    rax *= rdi
+    rdi -= 1
+    cjump 0 < rdi :LOOP
+    return
+  )
+  (:rec_factorial
+    1 1
+    cjump 0 = rdi :REC_FAC_RET1
+    mem rsp 0 <- rdi
+    rdi -= 1
+    mem rsp -8 <- :REC_FAC_RET
+    call :rec_factorial 1
+    :REC_FAC_RET
+    rdi <- mem rsp 0
+    rax *= rdi
+    return
+    :REC_FAC_RET1
+    rax <- 1
+    return
+  )
+)

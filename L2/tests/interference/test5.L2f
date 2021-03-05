@@ -1,0 +1,11 @@
+(:myF
+0
+
+%variable3FXEWM9YA6 <- rbx
+
+  rbx <- 5
+  %myVar1 <- rbx
+
+rbx <- %variable3FXEWM9YA6
+  return
+)

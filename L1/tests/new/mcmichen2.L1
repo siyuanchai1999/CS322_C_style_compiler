@@ -1,0 +1,102 @@
+// Sieve of Eratosthenes example
+// Author: Tommy McMichen
+// Description: the following program is an
+//   implementation of the Sieve of Eratosthenes
+//   algorithm for the range [1;n]
+
+(:main
+  (:main
+    // Args: n, max value to consider
+    1 0
+
+    mem rsp 0 <- rdi
+    rdi += 1
+    rdi *= 2
+    rdi += 1
+    rsi <- 1
+    call allocate 2
+
+    // r8 = n
+    // r9 = base address
+    // r10 = # of primes
+    rdi <- mem rsp 0
+    r9 <- rax
+    r10 <- 0    
+
+    mem r9 8 <- 0
+    mem r9 16 <- 0
+
+    // r11 = index
+    r11 <- 2
+
+    :loop1
+    cjump rdi < r11 :print
+
+    // calculate mem address of index
+    r8 <- r11
+    r8 *= 8
+    r8 += r9
+
+    r8 <- mem r8 0
+    cjump r8 = 0 :footer1
+    r10 += 1
+
+    // j = i*i
+    r8 <- r11
+    r8 *= r8
+    :loop2
+    cjump rdi < r8 :footer1
+
+    // set index false
+    rsi <- r8
+    rsi *= 8
+    rsi += r9
+    mem rsi 0 <- 0
+    
+    // j += i
+    r8 += r11
+    goto :loop2
+
+    
+    :footer1
+    r11 += 1
+    goto :loop1
+
+    :print
+    // TODO: print all primes
+    mem rsp 0 <- rdi
+    rdi <- r10
+    rdi *= 2
+    rdi += 1
+    rsi <- 0
+    call allocate 2
+    r8 <- rax
+
+    r11 <- 0
+    r12 <- 0
+    :print_loop
+    cjump r10 < r11 :done
+
+    rsi <- r11
+    rsi *= 8
+    rsi += r9
+    rsi <- mem rsi 0
+
+    cjump rsi = 0 :print_footer
+    rsi <- r12
+    rsi *= 8
+    rsi += r8
+    mem rsi 0 <- r11
+
+    :print_footer
+    r11 += 1
+    goto :print_loop
+    
+    :done
+    rdi <- r8
+    call print 1
+
+    return
+
+  )
+)

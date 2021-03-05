@@ -1,0 +1,11 @@
+(:myF
+0
+
+  %variableVIZ0XN784J <- rbx
+
+  rbx <- 5
+  %myVar1 <- rbx
+
+  rbx <- %variableVIZ0XN784J
+  return
+)

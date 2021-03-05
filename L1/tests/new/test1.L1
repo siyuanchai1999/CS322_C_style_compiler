@@ -1,0 +1,40 @@
+(:manyreg
+  (:manyreg
+  0 0
+  rax <- 5
+  rbx <- 8
+  rbx++
+  goto :mylab
+  call print 1
+  :mylab
+  rcx <- rbx
+  r10 <- rax < rbx
+  r11 <- rbx < rax
+  rdi <- 15
+  r12 @ rdi rax 1
+  rax <- r12
+  call print 1
+  call print 1
+  rax <- 31
+  rdi <- rax
+  call print 1
+  r13 <- rdi
+  r13 += 3
+  r13--
+  r14 <- mem rsp 16
+  r15 <- 11
+  r15 <<= 1
+  rdi <- 5
+  rsi <- 15
+  call print 1
+  rax <- 31
+  rsi <- 15
+  rdi <- 51
+  call allocate 2
+  r8 <- mem rax 8
+  rdi <- r8
+  call print 1
+  return
+  )
+)
+

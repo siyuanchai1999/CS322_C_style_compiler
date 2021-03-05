@@ -1,0 +1,63 @@
+// gcd
+// contains recursive calls
+(:entry
+    (:entry
+        0
+        rdi <- 541 // a = 541
+        rsi <- 7919 // b = 7919
+        mem rsp -8 <- :goCallsGcdReturn
+        call :gcd 2
+        :goCallsGcdReturn
+        rdi <- rax
+        rdi <<= 1
+        rdi += 1 // encode rdi for display
+        call print 1 // should display 1, because 541 and 7919 are primes
+        return
+    )
+    (:gcd
+        2
+        cjump rsi = 0 :gcdInitialCondition // if b == 0: return a
+        %a <- rdi // r8 = a
+        %b <- rsi // r9 = b
+        // mem rsp -16 <- %a // store local variable a
+        // mem rsp -24 <- %b // store local variable b
+
+        rdi <- %a // mod(a, ...)
+        rsi <- %b // mod(..., b)
+        mem rsp -8 <- :gcdCallsModReturn
+        call :mod 2
+        :gcdCallsModReturn // rax == a % b
+        // r9 <- mem rsp -24 // restore b
+        // r8 <- mem rsp -16 // restore a
+
+        rdi <- %b //  gcd(b, ...)
+        rsi <- rax // gcd(..., a % b)
+        mem rsp -8 <- :gcdCallsGcdReturn
+        call :gcd 2
+        :gcdCallsGcdReturn // rax == gcd(b, a % b)
+        return
+
+        :gcdInitialCondition
+        rax <- rdi
+        return
+    )
+    (:mod // def mod(a: int, b: int) -> int
+        2
+        %i <- 0 // i = 0
+        %a <- rdi
+        %b <- rsi
+        rax <- %a // res = a
+        :modWhile // while a > b * i
+            %bi <- %b
+            %bi *= %i // b * i
+            cjump %bi <= %a :modWhileInto // if a >= b * i
+            return // else: return
+
+            :modWhileInto
+            rax <- %a // res = a
+            rax -= %bi // res = res - b * i
+            %i += 1 // i += 1
+            cjump 1 = 1 :modWhile
+            return 
+    )
+)

@@ -1,0 +1,48 @@
+(:fun1
+  (:fun1
+  0 0
+  mem rsp -8 <- :fun2_ret
+  call :fun2 0
+  :fun2_ret
+  call print 1
+  rdx <- 123
+  mem rsp -8 <- :fun3_ret
+  call :fun3 5
+  :fun3_ret
+  rdi <- rsi
+  call print 1
+  rdx <- 5
+  mem rsp -8 <- :fun3_ret2
+  call :fun3 5
+  :fun3_ret2
+  rdi <- rsi
+  call print 1
+  mem rsp -8 <- :fun4_ret
+  call :fun4 0
+  :fun4_ret
+  call print 1
+  return
+  )
+  (:fun2
+  0 0
+  rdi <- 7
+  return
+  )
+  (:fun3
+  5 0
+  rdi <- 15
+  cjump rdx < rdi :skipper
+  rsi <- 15
+  return
+  :skipper
+  rsi <- 123
+  return
+  
+  )
+  (:fun4
+  0 1
+  rdi <- 31
+  return
+  )
+  
+)

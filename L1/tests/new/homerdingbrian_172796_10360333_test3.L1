@@ -1,0 +1,54 @@
+(:stdlibCalls
+
+  (:stdlibCalls
+    0 0
+    // get input
+    // input "1": error from no allocation
+    // input "2": error from out of bounds access
+    // input "3": print array with second element changed
+    // input anything else: print array twice 
+    call input 0
+    rbx <- rax
+    cjump rbx = 3 :skipAlloc
+
+    rdi <- 15
+    rsi <- 3
+    call allocate 2
+    rbp <- rax
+    rdi <- rbp
+    call print 1
+
+    :skipAlloc
+    // Get size of allocation
+    r15 <- mem rbp 0 
+    cjump r15 < 7 :error1
+
+    r14 <- 9
+    cjump rbx = 5 :skipAccessFix
+    r14 -= 3
+    :skipAccessFix
+    cjump r15 <= r14 :error2
+
+    cjump rbx = 7 :changeSecond
+    :jumpBack
+
+    rdi <- rbp
+    call print 1
+    return
+
+    :changeSecond
+    mem rbp 16 <- 5
+    goto :jumpBack
+  
+
+    :error1
+    rdi <- 5
+    call tensor-error 1  
+    :error2
+    rdi <- 3
+    rsi <- 3
+    rdx <- 3
+    call tensor-error 3
+  )
+
+)

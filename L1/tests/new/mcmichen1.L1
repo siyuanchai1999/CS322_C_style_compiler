@@ -1,0 +1,43 @@
+// Binary Exponentiation example
+// Author: Tommy McMichen
+// Description: the following program is a
+//   non-recursive implementation of the binary
+//   exponentiation algorithm written in the
+//   L1 language for CS322.
+
+(:MAIN
+  (:MAIN
+    // binary exponentiation
+    // args: rdi=base, rsi=exponent
+    2 0
+
+    // r8 = result
+    // r9 = working exponent
+    // r10 = working base
+    r8 <- 1
+    r9 <- rsi
+    r10 <- rdi
+
+    :LOOP
+    cjump r9 = 0 :DONE
+
+    r11 <- r9
+    r11 &= 1
+    cjump r11 = 1 :SKIP
+
+    r8 *= r10
+    :SKIP
+    r10 *= r10
+    r9 >>= 1
+
+    goto :LOOP
+
+    :DONE
+    rdi <- r8
+    call print 1
+
+    mem rsp 0 <- r8
+    rax <- mem rsp 0
+    return
+  )
+)

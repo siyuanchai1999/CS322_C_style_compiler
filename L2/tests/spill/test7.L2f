@@ -1,0 +1,9 @@
+(:go
+0
+mem %var2 8 += %var2
+return
+)
+
+%var2
+
+%S

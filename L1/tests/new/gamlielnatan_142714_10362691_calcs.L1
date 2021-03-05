@@ -1,0 +1,71 @@
+// performs a series of calculations on several numbers
+// intended to test passing values between functions
+
+(:calcs
+  (:calcs
+    0 6
+    rdi <- 5
+    rsi <- 3
+    rdx <- 13
+    rcx <- 17
+    r8  <- 7
+    r9  <- 23
+    mem rsp 0  <- rdi
+    mem rsp 8  <- rsi
+    mem rsp 16 <- rdx
+    mem rsp 24 <- rcx
+    mem rsp 32 <- r8
+    mem rsp 40 <- r9
+
+    mem rsp -8 <- :sum_ret
+    call :sum 6
+    :sum_ret
+    rdi <- rax
+    mem rsp -8 <- :int_print_ret
+    call :int_print 1
+    :int_print_ret
+    
+    rdi <- mem rsp 0
+    rsi <- mem rsp 8
+    rdx <- mem rsp 16
+    rcx <- mem rsp 24
+    r8  <- mem rsp 32
+    r9  <- mem rsp 40
+    
+    mem rsp -8 <- :prod_ret
+    call :prod 6
+    :prod_ret
+    rdi <- rax
+    mem rsp -8 <- :int_print_ret_2
+    call :int_print 1
+    :int_print_ret_2
+    return
+  )
+  (:sum
+    6 0
+    rdi += rsi
+    rdx += rcx
+    r8  += r9
+    rdx += r8
+    rdi += rdx
+    rax <- rdi
+    return
+  )
+  (:prod
+    6 0
+    rdi *= rsi
+    rdx *= rcx
+    r8  *= r9
+    rdi *= rdx
+    rdi *= r8
+    rax <- rdi
+    return
+  )
+  (:int_print
+    1 0
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return
+  )
+)

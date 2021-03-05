@@ -1,0 +1,80 @@
+// Tried to pass arguments on the stack
+// Find max of 8 numbers
+(:go
+    (:eight
+        8
+
+        cjump rdi <= rsi :rdi_small
+        goto :rcx_cmp
+
+        :rdi_small
+        rdi <- rsi
+
+        :rcx_cmp
+        cjump rdx <= rcx :rdx_small
+        goto :r8_cmp
+
+        :rdx_small
+        rdx <- rcx 
+
+        :r8_cmp
+        cjump r8 <= r9 :r8_small
+        goto :stack_comp
+
+        :r8_small
+        r8 <- r9
+
+        :stack_comp
+        r10 <- stack-arg 0
+        r11 <- stack-arg 8
+        cjump r10 <= r11 :first_small
+        goto :rdi_cmp_2
+
+        :first_small
+        r10 <- r11
+
+        :rdi_cmp_2
+        cjump rdi <= rdx :rdi_smaller_than_rdx
+        goto :r8_cmp_r10
+
+        :rdi_smaller_than_rdx
+        rdi <- rdx
+
+        :r8_cmp_r10
+        cjump r8 <= r10 :r8_smaller_than_r10
+        goto :final_cmp
+
+        :r8_smaller_than_r10
+        r8 <- r10
+
+        :final_cmp
+        cjump rdi <= r8 :done
+        rdi <- r8
+
+        :done
+        rax <- rdi
+        return    
+    )
+    (:go
+        0 
+        rdi <- 1
+        rsi <- 3
+        rdx <- 74233
+        rcx <- 65366
+        r8 <- 42
+        r9 <- 13
+        mem rsp -16 <- -2
+        mem rsp -24 <- 14108
+        mem rsp -8 <- :eight_ret
+        call :eight 8
+        :eight_ret
+
+        rdi <- rax
+        rdi <<= 1
+        rdi += 1
+        call print 1
+        
+        rax <- 0
+        return
+    )
+)

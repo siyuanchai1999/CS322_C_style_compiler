@@ -1,0 +1,36 @@
+(:main
+  (:main
+    0
+    call input 0
+    rdi <- rax
+    rsi <- 1
+    rdx <- rsi
+    rcx <- rsi
+    r8 <- rsi
+    r9 <- rax
+    mem rsp -16 <- rsi
+    mem rsp -8 <- :yeet_ret
+    call :yeet 7
+    :yeet_ret
+    rdi <- rax
+    cjump rdi = 0 :err
+    call print 1
+    goto :end
+    :err
+    rdi <- -1
+    call print 1
+    :end
+    return)
+    (:yeet
+      7
+      r10 <- stack-arg 0
+      %yeet += rsi
+      %yeet += rdx
+      %yeet += rcx
+      %yeet += r8
+      %yeet += r9
+      %yeet += r10
+      r9 += r10
+      r9 += 6
+      rax <- r9 = %yeet
+      return))

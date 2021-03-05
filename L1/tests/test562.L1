@@ -1,0 +1,63 @@
+(:go
+(:go
+	0 0
+	rdi <- 5
+	rsi <- 85
+	mem rsp -8 <- :f_ret_1
+	call allocate 2
+	:f_ret_1
+	mem rax 16 <- 5
+	rdi <- rax
+	mem rsp -8 <- :f_ret_2
+	call :reverseArray 1
+	:f_ret_2
+	return
+)
+
+(:reverseArray
+	1 0
+	rsi <- rdi
+	rsi &= 1
+	cjump rsi = 0 :isArray
+	goto :notArray
+	:notArray
+	rax <- -1
+	return
+	:isArray
+	rcx <- 0
+	rax <- rdi
+	r9 <- mem rdi 0
+	r8 <- rax
+	rdi <- r9
+	rdi *= 8
+	rdi += 16
+	r8 += rdi
+	rdx <- r9
+	rdx -= 1
+	rdi <- r9
+	rdi <<= 1
+	rdi += 1
+	:loop
+	cjump rcx < r9 :continue
+	goto :exit
+	:continue
+	rdi <- rcx
+	rdi <<= 1
+	rdi += 1
+	rax += 8
+	r8 -= 8
+	rdi <- mem rax 0
+	rsi <- mem r8 0
+	mem rax 0 <- rsi
+	mem r8 0 <- rdi
+	rcx++
+	rdx -= 1
+	cjump rdx <= rcx :exit
+	goto :loop
+	goto :loop
+	:exit
+	rax <- 1
+	return
+)
+
+)

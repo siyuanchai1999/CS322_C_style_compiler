@@ -1,0 +1,200 @@
+define :main () {
+ 
+:entrance
+ %newVar1 <- 11 >> 1
+ %newVar0 <- %newVar1
+ %newVar2 <- 11 >> 1
+ %newVar0 <- %newVar0 * %newVar2
+ %newVar0 <- %newVar0 << 1
+ %newVar0 <- %newVar0 + 1
+ %newVar0 <- %newVar0 + 6
+ %arr1 <- call allocate (%newVar0, 1)
+ %newVar3 <- %arr1 + 8
+ store %newVar3 <- 5
+ %newVar4 <- %arr1 + 16
+ store %newVar4 <- 11
+ %newVar5 <- %arr1 + 24
+ store %newVar5 <- 11
+ %newVar7 <- 10 >> 1
+ %newVar6 <- %newVar7
+ %newVar8 <- 10 >> 1
+ %newVar6 <- %newVar6 * %newVar8
+ %newVar6 <- %newVar6 << 1
+ %newVar6 <- %newVar6 + 1
+ %newVar6 <- %newVar6 + 6
+ %arr2 <- call allocate (%newVar6, 1)
+ %newVar9 <- %arr2 + 8
+ store %newVar9 <- 5
+ %newVar10 <- %arr2 + 16
+ store %newVar10 <- 10
+ %newVar11 <- %arr2 + 24
+ store %newVar11 <- 10
+ %newVar13 <- 20 >> 1
+ %newVar12 <- %newVar13
+ %newVar14 <- 20 >> 1
+ %newVar12 <- %newVar12 * %newVar14
+ %newVar12 <- %newVar12 << 1
+ %newVar12 <- %newVar12 + 1
+ %newVar12 <- %newVar12 + 6
+ %arr3 <- call allocate (%newVar12, 1)
+ %newVar15 <- %arr3 + 8
+ store %newVar15 <- 5
+ %newVar16 <- %arr3 + 16
+ store %newVar16 <- 20
+ %newVar17 <- %arr3 + 24
+ store %newVar17 <- 20
+ %newVar19 <- 10 >> 1
+ %newVar18 <- %newVar19
+ %newVar20 <- 40 >> 1
+ %newVar18 <- %newVar18 * %newVar20
+ %newVar18 <- %newVar18 << 1
+ %newVar18 <- %newVar18 + 1
+ %newVar18 <- %newVar18 + 6
+ %arr4 <- call allocate (%newVar18, 1)
+ %newVar21 <- %arr4 + 8
+ store %newVar21 <- 5
+ %newVar22 <- %arr4 + 16
+ store %newVar22 <- 10
+ %newVar23 <- %arr4 + 24
+ store %newVar23 <- 40
+ %newVar25 <- 3 >> 1
+ %newVar24 <- %newVar25
+ %newVar26 <- 45 >> 1
+ %newVar24 <- %newVar24 * %newVar26
+ %newVar24 <- %newVar24 << 1
+ %newVar24 <- %newVar24 + 1
+ %newVar24 <- %newVar24 + 6
+ %arr5 <- call allocate (%newVar24, 1)
+ %newVar27 <- %arr5 + 8
+ store %newVar27 <- 5
+ %newVar28 <- %arr5 + 16
+ store %newVar28 <- 3
+ %newVar29 <- %arr5 + 24
+ store %newVar29 <- 45
+ %newVar31 <- 3 >> 1
+ %newVar30 <- %newVar31
+ %newVar32 <- 10 >> 1
+ %newVar30 <- %newVar30 * %newVar32
+ %newVar30 <- %newVar30 << 1
+ %newVar30 <- %newVar30 + 1
+ %newVar30 <- %newVar30 + 6
+ %arr6 <- call allocate (%newVar30, 1)
+ %newVar33 <- %arr6 + 8
+ store %newVar33 <- 5
+ %newVar34 <- %arr6 + 16
+ store %newVar34 <- 3
+ %newVar35 <- %arr6 + 24
+ store %newVar35 <- 10
+ %newVar37 <- 3 >> 1
+ %newVar36 <- %newVar37
+ %newVar38 <- 10 >> 1
+ %newVar36 <- %newVar36 * %newVar38
+ %newVar36 <- %newVar36 << 1
+ %newVar36 <- %newVar36 + 1
+ %newVar36 <- %newVar36 + 6
+ %arr7 <- call allocate (%newVar36, 1)
+ %newVar39 <- %arr7 + 8
+ store %newVar39 <- 5
+ %newVar40 <- %arr7 + 16
+ store %newVar40 <- 3
+ %newVar41 <- %arr7 + 24
+ store %newVar41 <- 10
+ %newVar43 <- 3 >> 1
+ %newVar42 <- %newVar43
+ %newVar44 <- 10 >> 1
+ %newVar42 <- %newVar42 * %newVar44
+ %newVar42 <- %newVar42 << 1
+ %newVar42 <- %newVar42 + 1
+ %newVar42 <- %newVar42 + 6
+ %arr8 <- call allocate (%newVar42, 1)
+ %newVar45 <- %arr8 + 8
+ store %newVar45 <- 5
+ %newVar46 <- %arr8 + 16
+ store %newVar46 <- 3
+ %newVar47 <- %arr8 + 24
+ store %newVar47 <- 10
+ %newVar49 <- 3 >> 1
+ %newVar48 <- %newVar49
+ %newVar50 <- 10 >> 1
+ %newVar48 <- %newVar48 * %newVar50
+ %newVar48 <- %newVar48 << 1
+ %newVar48 <- %newVar48 + 1
+ %newVar48 <- %newVar48 + 6
+ %arr9 <- call allocate (%newVar48, 1)
+ %newVar51 <- %arr9 + 8
+ store %newVar51 <- 5
+ %newVar52 <- %arr9 + 16
+ store %newVar52 <- 3
+ %newVar53 <- %arr9 + 24
+ store %newVar53 <- 10
+ %newVar55 <- 3 >> 1
+ %newVar54 <- %newVar55
+ %newVar56 <- 10 >> 1
+ %newVar54 <- %newVar54 * %newVar56
+ %newVar54 <- %newVar54 << 1
+ %newVar54 <- %newVar54 + 1
+ %newVar54 <- %newVar54 + 6
+ %arr10 <- call allocate (%newVar54, 1)
+ %newVar57 <- %arr10 + 8
+ store %newVar57 <- 5
+ %newVar58 <- %arr10 + 16
+ store %newVar58 <- 3
+ %newVar59 <- %arr10 + 24
+ store %newVar59 <- 10
+ %temp <- call :sum (%arr1)
+ %ans <- %temp
+ %temp <- call :sum (%arr2)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr3)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr4)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr5)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr6)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr7)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr8)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr9)
+ %ans <- %temp + %ans
+ %temp <- call :sum (%arr10)
+ %ans <- %temp + %ans
+ return 
+}
+
+define :sum (%arr) {
+ 
+:entrance
+ %sum1 <- 0
+ br :entrance2
+ 
+:entrance2
+ %newVar0 <- 0 * 8
+ %newVar1 <- %newVar0 + 16
+ %newVar2 <- %arr + %newVar1
+ %len <- load %newVar2
+ %newVar3 <- 1 * 8
+ %newVar4 <- %newVar3 + 16
+ %newVar5 <- %arr + %newVar4
+ %len2 <- load %newVar5
+ %len_track1 <- %len - 1
+ %len_track2 <- %len2 - 1
+ %newVar7 <- 0
+ %newVar8 <- %arr + 24
+ %newVar9 <- load %newVar8
+ %newVar10 <- %newVar9 >> 1
+ %newVar11 <- 1
+ %newVar11 <- %newVar10 * %newVar11
+ %newVar12 <- 0 * %newVar11
+ %newVar7 <- %newVar12 + %newVar7
+ %newVar7 <- %newVar7 + %len_track2
+ %newVar6 <- %newVar7 * 8
+ %newVar6 <- %newVar6 + 32
+ %newVar13 <- %arr + %newVar6
+ %s <- load %newVar13
+ %sum <- %s + %sum
+ return %sum
+}
+

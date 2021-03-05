@@ -1,0 +1,53 @@
+(:called
+	(:called
+	0 0
+	
+	rax <- 11 // encoded (5)
+	rdi <- rax
+	r12 <- rax // number
+	r12 -= 2
+	rax <- 9 // encoded (4)
+	r13 <- rax // fill number
+	
+	// r12 layers
+	// r13 fill number
+	// r14 current layer
+
+	r14 <- 3
+	r15 <- 0
+	cjump r12 < 3 :end_early
+
+	:start_loop
+	
+	rdi <- r14
+	rsi <- r13
+	mem rsp -8 <- :done_alloc
+	call allocate 2
+	:done_alloc
+	rdi <- rax
+	mem rsp -8 <- :done_print_layer
+	call print 1
+	:done_print_layer
+
+	r14 += 2
+
+	cjump r14 <= r12 :start_loop	
+		
+	:start_loop_2
+	rdi <- r14
+	rsi <- r13
+	mem rsp -8 <- :done_alloc_down
+	call allocate 2
+	:done_alloc_down
+	rdi <- rax
+	mem rsp -8 <- :done_print_down_layer
+	call print 1
+	:done_print_down_layer
+
+	r14 -= 2
+	cjump 1 < r14 :start_loop_2
+
+	:end_early	
+	return
+	)
+)

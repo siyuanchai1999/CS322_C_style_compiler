@@ -1,0 +1,49 @@
+(:set_print_array
+  (:set_print_array
+    0 
+    
+    // allocate array with two elements
+    rdi <- 5
+    rsi <- 0
+    call allocate 2
+  
+    // set array values
+    mem rsp -8 <- :set_ret
+    rdi <- rax
+    call :set_array 1
+    :set_ret
+
+    // print array values
+    rdi <- rax
+    mem rsp -8 <- :print_ret
+    call :print_array 1
+    :print_ret
+
+    return
+  )
+  (:set_array
+    1
+    %arr <- rdi
+    call input 0
+    %x <- rax
+    call input 0
+    %y <- rax
+    mem %arr 8 <- %x
+    mem %arr 16 <- %y
+    rax <- %arr
+    
+    return  
+  )
+  (:print_array
+    1
+    %arr <- rdi
+    %x <- mem %arr 8
+    %y <- mem %arr 16
+    rdi <- %x
+    call print 1
+    rdi <- %y
+    call print 1    
+    rax <- %arr
+    return
+  )
+)

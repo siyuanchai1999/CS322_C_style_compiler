@@ -1,0 +1,43 @@
+(:go
+    (:go
+        0 2
+        r12 <- 1
+        r10 <- 21
+        rdi <- r12
+        rsi <- r10
+        mem rsp 0 <- r10
+		mem rsp 8 <- rsi
+        mem rsp -8 <- :F1_ret0
+        call :F1 2                  //print even number <= 10
+        :F1_ret0
+		rsi <- mem rsp 8
+        r10 <- mem rsp 0
+
+        rdi <- rax
+        rsi <- r10
+        mem rsp 0 <- r10
+		mem rsp 8 <- rsi
+        mem rsp -8 <- :F1_ret1
+        call :F1 2                  //print odd number <= 10
+        :F1_ret1
+		rsi <- mem rsp 8
+        r10 <- mem rsp 0
+        rdi <- r10
+        call print 1
+        return
+    )
+    (:F1
+        2 1
+        r10 <- rdi
+        r12 <- rsi
+        :LOOP
+        rdi <- r10
+        mem rsp 0 <- r10
+        call print 1
+        r10 <- mem rsp 0
+        r10 += 4
+        cjump r10 <= r12 :LOOP
+        rax <- 3
+        return
+    )    
+)

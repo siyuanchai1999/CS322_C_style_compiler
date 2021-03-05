@@ -1,0 +1,101 @@
+(:verbose_nonsense	
+	(:verbose_nonsense
+	0
+	r12 <- 100 // unencoded
+	r13 <- 0 // primes found
+	r14 <- 2 // currently checking r14
+
+	:keep_going
+	mem rsp -8 <- :print_iter
+	rdi <- r14
+	rdi <<= 1
+	rdi += 1
+	//call print 1
+	:print_iter
+
+	rdi <- r14
+	mem rsp -8 <- :after_is_prime
+	call :is_prime 0
+	:after_is_prime
+	cjump rax < 1 :nnot_prime
+    r13 += 1
+	rdi <- r14
+	rdi <<= 1
+	rdi += 1
+	mem rsp -8 <- :nnot_prime
+	call print 1
+	:nnot_prime
+	r14 += 1
+	cjump r13 < r12 :keep_going
+	return
+	)
+
+    (:is_prime
+	1
+	
+	%r12_sto <- r12
+	%r13_sto <- r13
+	
+	r12 <- rdi // number to check
+	r13 <- 2 // current
+	
+	:is_prime_test
+	cjump r13 < r12 :is_prime_loop
+	goto :prime
+	:is_prime_loop
+	
+	rdi <- r12
+	rsi <- r13
+	mem rsp -8 <- :is_prime_post_call
+	call :is_divisible 2
+	:is_prime_post_call
+
+    cjump rax = 1 :not_prime
+	
+	r13 += 1
+	goto :is_prime_test
+	
+	:not_prime
+	rax <- 0
+	goto :is_prime_done
+	
+	:prime	
+	rax <- 1
+	goto :is_prime_done
+	
+	:is_prime_done
+	r12 <- %r12_sto
+	r13 <- %r13_sto
+	return
+	)
+	(:is_divisible
+	2
+	%r12_sto <- r12
+	%r13_sto <- r13
+	
+	r12 <- rdi // dividend
+	r13 <- rsi // divisor (current)
+	
+	:is_divisible_test
+	cjump r13 < r12 :is_divisible_loop
+	cjump r13 = r12 :divisible
+	goto :not_divisible
+	:is_divisible_loop
+	r13 += rsi
+	goto :is_divisible_test
+	
+	:divisible
+	rax <- 1
+	goto :is_divisible_done
+	
+	:not_divisible
+	rax <- 0
+	goto :is_divisible_done
+	
+	:is_divisible_done
+	r12 <- %r12_sto
+	r13 <- %r13_sto
+	return
+	)
+
+)

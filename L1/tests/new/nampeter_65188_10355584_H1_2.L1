@@ -1,0 +1,67 @@
+(:main 
+  (:main
+    0 0 
+    call input 0 
+    rax --
+    rax >>= 1
+    rbx <- rax
+    rdi <- 21
+    rsi <- 1
+    call allocate 2
+    r15 <- 0
+    r14 <- rax
+    r14 += 8
+    :FILL_LOOP
+    mem r14 0 <- r15
+    r15 ++
+    r14 += 8 
+    cjump r15 < 10 :FILL_LOOP
+
+
+    r8 <- 0
+    r10 <- mem rax 0
+    r10 --
+    r9 <- 0
+
+    :BIN_SEARCH
+    cjump r10 < r8 :NOT_FOUND
+    r9 <- r8
+    r9 += r10
+    r9 >>= 1
+    
+    r14 <- rax
+    r14 += 8
+    r14 @ r14 r9 8
+    
+    r11 <- mem r14 0
+
+    cjump r11 = rbx :FOUND
+
+    cjump r11 < rbx :GREATER
+    r9 --
+    r10 <- r9
+    goto :BIN_SEARCH
+
+    :GREATER
+    r9 ++
+    r8 <- r9
+    goto :BIN_SEARCH
+    
+    :NOT_FOUND
+    rax <- -1
+    rdi <- rax
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return
+    
+    :FOUND
+    rax <- r9
+    rdi <- rax
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return 
+
+  )
+)

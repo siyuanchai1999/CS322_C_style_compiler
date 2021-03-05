@@ -1,0 +1,61 @@
+// prints the first n numbers in the fibonacci sequence
+// note: does not check for overflow, so large numbers in the sequence will be incorrect
+
+(:fib
+  (:fib
+    0 0
+    // input how many numbers to display
+    //manual value is assigned for demonstration purposes
+    rax <- 111
+    //call input 0
+
+    r12 <- rax
+    r12 >>= 31
+    cjump r12 = 1 :end
+
+    r12 <- rax
+    r12 >>= 1
+    r13 <- 0
+    r14 <- 1
+    rdi <- 0
+
+    cjump r12 <= 0 :end
+    rdi <- 0
+    mem rsp -8 <- :intPrint_ret_1
+    call :intPrint 1
+    :intPrint_ret_1
+    r12 --    
+    
+    cjump r12 <= 0 :end
+    rdi <- 1
+    mem rsp -8 <- :intPrint_ret_2
+    call :intPrint 1
+    :intPrint_ret_2
+    r12 --
+    
+    :start
+    cjump r12 <= 0 :end
+
+    r15 <- r14
+    r14 += r13
+    r13 <- r15
+
+    rdi <- r14
+    mem rsp -8 <- :intPrint_ret_3
+    call :intPrint 1
+    :intPrint_ret_3
+
+    r12 --
+    goto :start
+    
+    :end
+    return
+  )
+  (:intPrint
+    0 0
+    rdi <<= 1
+    rdi ++
+    call print 1
+    return
+  )
+)

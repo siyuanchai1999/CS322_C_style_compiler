@@ -1,0 +1,68 @@
+(:sum_three_and_double
+  (:sum_three_and_double
+    0 0
+    rdi <- 7
+    rsi <- 0
+    call allocate 2
+    rdi <- rax
+    mem rsp -8 <- :get_ret
+    call :get_three 1
+    :get_ret
+    rdi <- mem rax 8
+    rsi <- mem rax 16
+    rdx <- mem rax 24
+    mem rsp -8 <- :sum_ret
+    call :sum_three 3
+    :sum_ret
+    rdi <- rax
+    mem rsp -8 <- :double_ret
+    call :double 1
+    :double_ret
+    rdi <- rax
+    call print 1
+    return
+  )
+  (:get_three
+    1 1
+    mem rsp 0 <- r12
+    r12 <- rdi
+    //call input 0
+    rax <- 5
+    mem r12 8 <- rax
+    mem rsp 0 <- r12
+    //call input 0
+    rax <- 11
+    mem r12 16 <- rax
+    //call input 0
+    rax <- 19
+    mem r12 24 <- rax    
+    rax <- r12
+    r12 <- mem rsp 0
+    return
+  )
+  (:sum_three
+    3 0
+    rax <- 0
+    r10 <- rdi
+    r10 >>= 1
+    rax += r10
+    r10 <- rsi
+    r10 >>= 1
+    rax += r10
+    r10 <- rdx
+    r10 >>= 1
+    rax += r10
+    rax <<= 1
+    rax += 1
+    return
+  )
+  (:double
+    1 0
+    rdi >>= 1
+    rdi <<= 2
+    rdi += 1
+    rax <- rdi
+    return
+  )
+)
+    

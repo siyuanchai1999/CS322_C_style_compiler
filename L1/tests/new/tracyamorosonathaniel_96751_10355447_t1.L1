@@ -1,0 +1,53 @@
+(:t1
+	(:t1
+	0 0
+	rdi <- 17
+	rsi <- 2675
+	mem rsp -8 <- :alloc_ret
+	call allocate 2
+	:alloc_ret
+	rdi <- rax
+	r12 <- rax
+	mem rsp -8 <- :post_increment
+	call :inc_array 1
+        :post_increment
+	mem rsp -8 <- :post_print
+	rdi <- r12
+	call print 1
+	:post_print
+	return
+	)
+
+	(:inc_array
+	1 4
+	mem rsp 0 <- r12
+	mem rsp 8 <- r13
+	mem rsp 16 <- r14
+	mem rsp 24 <- r15
+
+	r12 <- mem rdi 0 //size of array
+
+	r13 <- 0   // offset
+	r14 <- rdi // pointer
+	r14 += 8  // head pointer
+
+	:test
+	cjump r13 < r12 :loop
+	goto :done
+	:loop
+	rsi <- mem r14 0
+	r15 <- r13
+	r15 <<= 1
+	rsi += r15
+	mem r14 0 <- rsi	
+	r13 += 1
+	r14 += 8
+	goto :test
+	:done
+	r12 <- mem rsp 0
+	r13 <- mem rsp 8
+	r14 <- mem rsp 16
+	r15 <- mem rsp 24
+	return 
+	)
+)
