@@ -5,7 +5,7 @@
 
 #define IN_MAP(map, key) (map.find(key) != map.end())
 #define IN_SET(set, key) (set.find(key) != set.end())
-
+#define IN_VEC(vec, key) (std::find(vec.begin(), vec.end(), key) != vec.end())
 
 // template<class T>
 // void set_union(std::set<T> & srcA, std::set<T> & srcB, std::set<T> & target);

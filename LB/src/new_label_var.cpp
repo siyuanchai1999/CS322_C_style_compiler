@@ -9,33 +9,72 @@ namespace LB {
         “LABELNAME” to LLG
      * */
 
-    
-
-    std::string find_longest_var (Program & p) {
+    std::string find_longest_var_scope(Instruction_scope * scope ) {
         std::string longest = "";
         int32_t len = 0;
 
-        for (Function * F: p.functions) {
-            for (auto & kv : F->varName2ptr) {
-                int32_t l = kv.first.length();
+        for (auto & kv : scope->varName2ptr) {
+            int32_t l = kv.first.length();
+            if (l > len) {
+                longest = kv.first;
+                len = l;
+            }
+        }
+
+        for (Instruction * inst : scope->insts) {
+            if (inst->type == inst_scope) {
+                Instruction_scope * nextScope = (Instruction_scope *) inst;
+                std::string LV_scope = find_longest_var_scope(nextScope);
+
+                int32_t l = LV_scope.length();
                 if (l > len) {
-                    longest = kv.first;
+                    longest = LV_scope;
                     len = l;
-                }
+                } 
             }
         }
 
         return longest;
     }
 
-    std::string new_var_prefix(Program & p) {
-        std::string LV =  find_longest_var(p);
-        if (LV.size() == 0) {
-            LV = "%";
+
+
+    std::string find_longest_var (Program & p) {
+        std::string longest = "";
+        int32_t len = 0;
+
+        for (Function * F: p.functions) {
+            
+
+            for (auto & kv : F->argName2ptr) {
+                int32_t l = kv.first.length();
+                if (l > len) {
+                    longest = kv.first;
+                    len = l;
+                }
+            }
+
+            std::string LV_main_scope = find_longest_var_scope(F->scope);
+            int32_t l = LV_main_scope.length();
+            if (l > len) {
+                longest = LV_main_scope;
+                len = l;
+            } 
+
         }
-        
-        return LV + "_new_";
+
+        return longest;
     }
+
+    // std::string new_var_prefix(Program & p) {
+    //     // std::string LV =  find_longest_var(p);
+    //     std::string LV =  "";
+    //     if (LV.size() == 0) {
+    //         LV = "%";
+    //     }
+        
+    //     return LV + "_new_";
+    // }
 
     std::string find_longest_label (Program & p) {
         std::string longest = "";
@@ -66,11 +105,15 @@ namespace LB {
     }
 
     LabelVarGen::LabelVarGen(Program &p) {
-        std::string LV = find_longest_var(p);
+        std::string LV =  find_longest_var(p);
         this->varPrefix = LV + "_newV_";        /* LLN */
         this->varIdx = 0;
 
         std::string LL = find_longest_label(p);
+
+        /**
+         * if LL is empty we need to pad a ":"
+         * */
         if (LL.length() == 0) {
             LL = ":empty";
         }
@@ -123,6 +166,12 @@ namespace LB {
         this->vars.push_back(newV);
 
         return newV;
+    }
+
+    std::string LabelVarGen::get_new_var_str() {
+        std::string ret = this->varPrefix + std::to_string(this->varIdx);
+        this->varIdx++;
+        return ret;
     }
 
     ItemLabel * LabelVarGen::get_new_label() {

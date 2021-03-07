@@ -546,6 +546,8 @@ namespace LB {
     struct Instruction_scope : Instruction {        
         std::vector<Instruction *> insts;
         std::map<ItemVariable *, ItemVariable *> ScopedToUnScopedVar; 
+        std::unordered_map<std::string, ItemVariable *> varName2ptr;
+
 
         Instruction_scope(Instruction_scope * parent);
         
@@ -553,6 +555,7 @@ namespace LB {
 
         void accept(InstVisitor & visitor) override;
         std::string to_string() override;
+        std::string to_string(int32_t nestedTimes);
         // Instruction_scope * copy() override;
     };
 
@@ -572,7 +575,7 @@ namespace LB {
          *  only used to remove duplicate var/label
          *      aka, every var/label with same name is the same object
          * */
-        std::unordered_map<std::string, Item *> varName2ptr;
+        std::unordered_map<std::string, ItemVariable *> argName2ptr;
         std::unordered_map<std::string, Item *> labelName2ptr;
         
         /**

@@ -830,6 +830,8 @@ namespace LB {
         Functions_rule
     > {};
 
+
+
     /* 
      * Actions attached to grammar rules.
      */
@@ -971,24 +973,62 @@ namespace LB {
     }
     };
 
+    /**
+     *  fetch the ItemVariable * that defines @varStr
+     *      it differentiate between different groups
+     * */
+
+    ItemVariable * fetchDefinedVar(std::string & varStr, Program &p) {
+        
+        
+        Instruction_scope * curScope = NULL;
+        
+        if(!scopeStack.empty()){
+            curScope = scopeStack.top();
+        } 
+
+        while (curScope != NULL)
+        {
+            if (IN_MAP(curScope->varName2ptr, varStr)) {
+                return curScope->varName2ptr[varStr];
+            } else {
+                curScope = curScope->parent;
+            }
+        }
+        
+        /**
+         *  curScope must be NULL here
+         *  no definition of varStr in any scope
+         *  must be a function argument
+         *  */
+        Function * currF = p.functions.back();
+        if(IN_MAP(currF->argName2ptr, varStr) ) {
+            return currF->argName2ptr[varStr];
+        } 
+
+        return NULL;
+    }
+
+
     template <>
     struct action<variable_rule>
     {
         template <typename Input>
         static void apply(const Input &in, Program &p)
         {
-            // std::cerr << "firing " << in.string() << '\n';
-            Function *currentF = p.functions.back();
-
-            /**
-             *  this is not the variable rule for declaration
-             *  must be in map
-             * */
-
-            assert (IN_MAP(currentF->varName2ptr, in.string()));
+            DEBUG_OUT << "firing " << in.string() << " in variable_rule " << '\n';
+            // Function *currentF = p.functions.back();
             
-            Item * v = currentF->varName2ptr[in.string()];
-            parsed_items.push_back(v);
+            /**
+             *  any var should be declared beforehand
+             *      it can be declared at different scope
+             * */
+            std::string inStr = in.string();
+            ItemVariable * var = fetchDefinedVar(inStr, p);
+            assert(var != NULL);
+
+
+            parsed_items.push_back(var);
 
         }
     };
@@ -1006,10 +1046,16 @@ namespace LB {
              *  This is a name from in src, so might also be a function name
              * */
             std::string inStr = in.string();
-            if(IN_MAP(currentF->varName2ptr, inStr)){
-                Item * v = currentF->varName2ptr[inStr];
-                parsed_items.push_back(v);
-            } else {
+           
+            ItemVariable * var = fetchDefinedVar(inStr, p);
+            if (var != NULL) {
+                /**
+                 *  this must be a variable
+                 * */
+                parsed_items.push_back(var);
+            } 
+            else 
+            {
                 ItemFName * fname;
                 if (IN_MAP(name2FNameItem, inStr)) {
                     /* get the fname */
@@ -1037,23 +1083,31 @@ namespace LB {
              *  Expect one typeSig in the parsed_items
              * */   
             assert(parsed_items.size() == 1);
-            // std::cerr << "firing " << in.string() << '\n';
             Function * currentF = p.functions.back();
+           
+            std::string inStr = in.string();
 
             /**
-             *  declaration of var so should NOT be in map
+             *  var should not declared anywhere
              * */
-            assert(!IN_MAP(currentF->varName2ptr, in.string()));
+            ItemVariable * var = fetchDefinedVar(inStr, p);
+            assert(var == NULL);
 
+            /**
+             *  constructing a new ItemVariable
+             * */
             Item * typeSig = parsed_items.back();
             parsed_items.pop_back();
             ItemVariable * v = new ItemVariable(
-                in.string(),
+                inStr,
                 typeSig    
             );
-            currentF->varName2ptr[in.string()] = v;
-            currentF->vars.insert(v);
 
+            /**
+             *  record the info at function
+             * */
+            currentF->argName2ptr[inStr] = v;
+            currentF->vars.insert(v);
             currentF->arg_list.push_back(v);
         }
     };
@@ -1064,48 +1118,48 @@ namespace LB {
         template <typename Input>
         static void apply(const Input &in, Program &p)
         {   
+            DEBUG_OUT << "firing " << in.string() << " in variable_declare_rule " << '\n';
+            
             /**
              *  Expect one typeSig in the parsed_items
              * */   
             assert(parsed_items.size() >= 1);
-            // std::cerr << "firing " << in.string() << '\n';
+            assert(!scopeStack.empty());
+
             Function * currentF = p.functions.back();
+            Instruction_scope * currScope = scopeStack.top();
             std::string inStr = in.string();
 
             /**
              *  declaration of var but
              *      but can be in the map because of scopes
              * */
-            // assert(!IN_MAP(currentF->varName2ptr, in.string()));
             Item * typeSig = parsed_items.front();
 
-
-            if(IN_MAP(currentF->varName2ptr, inStr)){
-                Item * v = currentF->varName2ptr[inStr];
-                
-
+            /**
+             *  var should not declared anywhere
+             * */
+            ItemVariable * var = fetchDefinedVar(inStr, p);
+            
+            if(var != NULL){
                 /**
-                 *  right now we assume that typesig of variable never changes ??
+                 *  var with name inStr was declared in some other scope
+                 *      This is fine. We don't need to do anything  
                  * */
-                assert(v->itemtype == ItemType::item_variable);
-                ItemVariable * var = (ItemVariable *) v;
-                assert(typeSig == var->typeSig);
-                
-                parsed_items.push_back(v);
-
-
-
-            } else {
-                ItemVariable * v = new ItemVariable(
-                    in.string(),
-                    typeSig    
-                );
-                
-                currentF->varName2ptr[inStr] = v;
-                currentF->vars.insert(v);
-
-                parsed_items.push_back(v);
-            }
+            } 
+            
+            /**
+             *  Regardless of the var has previously been defined
+             *      we create a new var with current typeSig
+             * */
+            ItemVariable * v = new ItemVariable(
+                inStr,
+                typeSig    
+            );
+            
+            currScope->varName2ptr[inStr] = v;
+            currentF->vars.insert(v);
+            parsed_items.push_back(v);
             
         }
     };
@@ -1122,11 +1176,15 @@ namespace LB {
 
             std::string inStr = in.string();
             
-            if (IN_MAP(currentF->varName2ptr, inStr)) {
+            /**
+             *  var should not declared anywhere
+             * */
+            ItemVariable * var = fetchDefinedVar(inStr, p);
+
+            if (var != NULL) {
                 /**
                  * This is a var
                  */
-                Item * var = currentF->varName2ptr[inStr];
                 parsed_items.push_back(var);
             }
             else {

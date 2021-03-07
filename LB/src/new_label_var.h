@@ -27,7 +27,10 @@ namespace LB {
 
         public:
             ItemVariable * get_new_var(VarType vtype);
+            std::string get_new_var_str();
             ItemLabel * get_new_label();
+
+
 
             void clean();
         

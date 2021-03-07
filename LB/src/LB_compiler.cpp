@@ -19,8 +19,9 @@
 #include "code_generator.h"
 #include "config.h"
 #include "new_label_var.h"
-// #include <spiller.h>
-// #include <register_allocation.h>
+#include "trans_scope_var.h"
+
+
 #include <utils.h>
  
 #ifdef DRIVER_DEBUG
@@ -45,7 +46,7 @@ int main(
     
     auto enable_code_generator = true;
     int32_t optLevel = 0;
-    bool verbose  = true;
+    bool verbose  = false;
 
     /* 
     * Check the compiler arguments.
@@ -82,8 +83,9 @@ int main(
     LB::Program p = LB::parse_file(argv[optind]);
     DEBUG_OUT << "Done: parsing!\n";
     
-    // LB::new_var_LBbel_init(p);
-
+    LB::new_var_label_init(p);
+    LB::translate_LB_vars(p);
+    LB::generateCode(p);
     // LB::encode_program(p);
     // LB::insertMemCheck(p);
     // LB::enforceBasicBlock(p);

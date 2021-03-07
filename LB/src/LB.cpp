@@ -729,6 +729,31 @@ namespace LB {
         
         return ret;
     }
+
+    std::string Instruction_scope::to_string(int32_t nestedTimes) {
+        std::string tabs(nestedTimes, '\t');
+
+
+        std::string ret = tabs + "{\n";
+        
+        for (Instruction * inst: this->insts) {
+            if (inst->type == InstType::inst_scope) {
+                Instruction_scope * scope  = (Instruction_scope *) inst;
+                ret += scope->to_string(nestedTimes + 1);
+            }
+            else {
+                ret += tabs;
+                ret += "\t";
+                ret += inst->to_string();
+            }
+            
+        }
+
+        ret += tabs;
+        ret += "}\n";
+
+        return ret;
+    }
     
     /**
      * Instruction accept() 
@@ -954,7 +979,7 @@ namespace LB {
         header +=  ")";
         DEBUG_OUT << header;
 
-        DEBUG_OUT << this->scope->to_string();
+        DEBUG_OUT << this->scope->to_string(0);
 
     }
 
